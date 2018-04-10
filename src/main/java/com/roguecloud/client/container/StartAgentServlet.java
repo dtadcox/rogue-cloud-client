@@ -58,8 +58,8 @@ public class StartAgentServlet extends HttpServlet {
 	// Specify your username and password. These will be automatically registered when you first connect
 	// to the game server.
 	
-	public static final String USERNAME = "your-username";
-	public static final String PASSWORD = "your-password";
+	public static final String USERNAME = "dta";
+	public static final String PASSWORD = "dta-pw";
 	
 	private static RemoteClient constructMyAI() {
 		return new SimpleAI();
@@ -179,7 +179,7 @@ public class StartAgentServlet extends HttpServlet {
 		
 		System.out.println("***********************************************************************************************");
 		System.out.println("*                                                                                             *");
-		System.out.println("*    Agent has started. Watch at: http://localhost:"+val+"/RogueCloudClientLiberty/StartAgent   *");
+		System.out.println("*    Agent has started. Watch at: http://localhost:"+val+"/gameclient/StartAgent              *");
 		System.out.println("*                                                                                             *");
 		System.out.println("***********************************************************************************************");
 		System.out.println();
