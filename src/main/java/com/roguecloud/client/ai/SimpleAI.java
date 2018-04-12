@@ -97,6 +97,14 @@ public class SimpleAI extends RemoteClient {
 		Weapon oldw = selfState.getPlayer().getWeapon();
 		System.out.println("*** " + oldw.getName() + " ("+oldw.getId()+") rating:" + oldw.calculateWeaponRating() );
 
+		System.out.println("********** My stuff *************");
+		for( OwnableObject oo : selfState.getPlayer().getInventory() ) {
+			System.out.println("*** " + oo.getContainedObject().getName() + "(" + oo.getContainedObject().getId() + ")" );
+		}
+
+		System.out.println("**********************************************************************************");
+		System.out.println("**********************************************************************************");
+		
 		// Look at all the objects the agent can see, and decide which, if any, they should go and pick up.
 		// Be careful, some objects might be guarded by monsters! 
 		// You can see monsters by calling AIUtils.findCreaturesInRange(...).
