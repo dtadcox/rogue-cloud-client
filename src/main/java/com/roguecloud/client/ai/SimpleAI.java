@@ -12,6 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. 
+ *
 */
 
 package com.roguecloud.client.ai;
@@ -88,6 +89,14 @@ public class SimpleAI extends RemoteClient {
 		SelfState selfState = getSelfState();
 		WorldState worldState = getWorldState();
 
+		System.out.println("********** My Armor *************");
+		for( Armour a : selfState.getPlayer().getArmour().getAll() ) {
+			System.out.println("*** " + a.getName() + "(" + a.getId() + ")  defense: " + a.getDefense() );
+		}
+		System.out.println("********** My weapon ************");
+		Weapon oldw = selfState.getPlayer().getWeapon();
+		System.out.println("*** " + oldw.getName() + " ("+oldw.getId()+") rating:" + oldw.calculateWeaponRating() );
+
 		// Look at all the objects the agent can see, and decide which, if any, they should go and pick up.
 		// Be careful, some objects might be guarded by monsters! 
 		// You can see monsters by calling AIUtils.findCreaturesInRange(...).
@@ -98,16 +107,25 @@ public class SimpleAI extends RemoteClient {
 			
 			if(objectOnGround.getObjectType() == ObjectType.ARMOUR) {
 				Armour a = (Armour)objectOnGround;
-				
-				return visibleGroundObjectContainer;
+				System.out.println(">>>>> I see armor: " + a.getName() + "(" + a.getId() + ")  defense: " + a.getDefense() );
+                if( isBetterArmour(a))
+				    return visibleGroundObjectContainer;
+				else
+				    return null;
 				
 			} else if(objectOnGround.getObjectType() == ObjectType.WEAPON) {
 				Weapon w = (Weapon)objectOnGround;
+				System.out.println(">>>>> I see weapon: " + w.getName() + "(" + w.getId() + ")  rating: " + w.calculateWeaponRating() );
 				
-				return visibleGroundObjectContainer;
+				if( oldw.calculateWeaponRating() < w.calculateWeaponRating() )
+				   return visibleGroundObjectContainer;
+			    else
+				   return null;
 				
 			} else if(objectOnGround.getObjectType() == ObjectType.ITEM) {
+
 				DrinkableItem i = (DrinkableItem)objectOnGround;
+  		        System.out.println(">>>>> I see drinkable: " + i.getName() + "(" + i.getId() + ")  magnitude: " + i.getEffect().getMagnitude() );
 				
 				return visibleGroundObjectContainer;
 			}
@@ -117,6 +135,21 @@ public class SimpleAI extends RemoteClient {
 		return null;
 	}
 	
+    boolean isBetterArmour(Armour na) {
+		boolean foundLikeType = false;
+    	for( Armour a : selfState.getPlayer().getArmour().getAll() ) {
+			if( na.getType() == a.getType() ) {
+				foundLikeType = true;
+				if(na.getDefense() > a.getDefense() )
+				    return true;
+			}
+		}   
+		if(!foundLikeType)
+		    return true;
+		return false;
+	}
+
+
 	/** While your character is wandering around the world, it will see other monsters, which it may optionally attack.
 	 *
 	 * This method is called each tick with a list of all monsters currently on screen. If you wish to 
